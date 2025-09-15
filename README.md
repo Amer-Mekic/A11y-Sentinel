@@ -22,14 +22,14 @@
 - **Deployment**: Vercel (Frontend), Railway (Backend, DB, Redis)
 - **Auth**: Next-Auth.js, JWT
 
-## 🗃️ Database Schema
+## Database Schema
 
 The application uses a MongoDB database with a schema designed for efficient querying of scan results and project management. The core models are structured as follows:
 
 ![Database Schema Diagram](diagram.svg)
 
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -42,14 +42,14 @@ The application uses a MongoDB database with a schema designed for efficient que
 1.  **Clone the repository**
 
     ```bash
-    git clone https://github.com/your-username/a11y-sentinel.git
-    cd a11y-sentinel
+    git clone https://github.com/Amer-Mekic/A11y-Sentinel.git
+    cd A11y-Sentinel
     ```
 
 2.  **Install dependencies**
 
     ```bash
-    # Install root dependencies (if using a monorepo) and for both frontend and backend
+    # Install root dependencies in frontend and backend respectively
     npm install
     ```
 
@@ -66,10 +66,6 @@ The application uses a MongoDB database with a schema designed for efficient que
 
     # Redis (for BullMQ)
     REDIS_URL="your_redis_connection_string"
-
-    # Next-Auth (if using other providers)
-    # GITHUB_ID=...
-    # GITHUB_SECRET=...
     ```
 
 4.  **Set up the database**
@@ -91,24 +87,18 @@ The application uses a MongoDB database with a schema designed for efficient que
     ```
     Open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
 
-## 📋 Project Roadmap
+## Project Roadmap
 
 - [ ] **Email Reports**: Automated weekly digest emails with scan summaries.
 - [ ] **PDF Export**: Generate and download client-ready PDF audit reports.
 - [ ] **Integration Hooks**: Automate scans via GitHub Actions or Netlify Deploy Hooks.
 - [ ] **Cross-Browser Testing**: Run scans using Playwright's Firefox and WebKit engines.
-- [ ] **Team Collaboration**: Invite team members to collaborate on projects.
 
-## 🤝 Contributing
+## Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](../../issues).
+Contributions, issues, and feature requests are welcome!
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - The incredible [axe-core](https://github.com/dequelabs/axe-core) team for their amazing accessibility engine.
 - The [Playwright](https://playwright.dev/) team for creating a robust browser automation tool.
-- The design inspiration from various modern SaaS dashboards.
