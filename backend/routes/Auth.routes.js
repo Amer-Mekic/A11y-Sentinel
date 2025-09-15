@@ -11,21 +11,23 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
     const { email, password } = req.body;
     try {
-        if (!password || !email) {
-            throw { status: 400, message: 'Email and password required.' };
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password required.' });
         }
 
-        const existingUser = prisma.user.findUnique({where: {email:email}});
+        const existingUser = await prisma.user.findUnique({ where: { email } });
         if (existingUser) {
-            throw { status: 409, message: 'User already exists.' };
+            return res.status(409).json({ message: 'User already exists.' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
-        prisma.user.create({data: {email:email, password:hashedPassword, createdAt: new Date()}});
+        await prisma.user.create({
+            data: { email, password: hashedPassword, createdAt: new Date() }
+        });
 
         res.status(201).json({ message: 'User registered successfully.' });
     } catch (err) {
-        res.status(err.status || 500).json({ message: err.message || 'Internal server error.' });
+        res.status(500).json({ message: err.message || 'Internal server error.' });
     }
 });
 
@@ -36,7 +38,7 @@ router.post('/login', async (req, res) => {
         if (!email || !password)
             return res.status(400).json({ message: 'Email and password required.' });
 
-        const user = await prisma.user.findUnique({where: {email:email}});
+        const user = await prisma.user.findUnique({ where: { email } });
         if (!user)
             return res.status(401).json({ message: 'Invalid credentials.' });
 
@@ -44,7 +46,11 @@ router.post('/login', async (req, res) => {
         if (!isMatch)
             return res.status(401).json({ message: 'Invalid credentials.' });
 
-        const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
+        const token = jwt.sign(
+            { email: user.email, id: user.id },
+            process.env.JWT_SECRET || 'secret',
+            { expiresIn: '1h' }
+        );
         res.json({ token });
     } catch (err) {
         res.status(500).json({ message: 'Internal server error.' });
