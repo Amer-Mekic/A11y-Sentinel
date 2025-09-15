@@ -44,7 +44,7 @@ model ScanResult {
   errorCount  Int
   warnings    Int
   violations  Json     // Detailed axe-core results stored as JSON
-  screenshot  String?  // URL to uploaded screenshot in S3/Cloudinary
+  screenshot  String?  // URL to uploaded screenshot in S3/Cloudinary (will choose later which service to use)
   createdAt   DateTime @default(now())
 }
 
