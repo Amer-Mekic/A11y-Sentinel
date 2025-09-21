@@ -60,4 +60,4 @@ async function crawlBaseURL(baseURL) {
 }
 export default { crawlBaseURL };
 
-crawlBaseURL('https://ziragroup.com/');
+crawlBaseURL('https://example.com/');
