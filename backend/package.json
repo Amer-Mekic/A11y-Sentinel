@@ -10,12 +10,16 @@
   "author": "Amer Mekic",
   "license": "ISC",
   "dependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "@prisma/client": "^6.16.1",
+    "axios": "^1.12.2",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "fast-xml-parser": "^5.2.5",
     "jsonwebtoken": "^9.0.2",
+    "playwright": "^1.55.1",
     "prisma": "^6.16.1"
   }
 }

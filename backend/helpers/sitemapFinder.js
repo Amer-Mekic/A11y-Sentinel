@@ -1,7 +1,7 @@
-import { head } from 'axios';
+import axios from 'axios';
 import { URL } from 'url';
-import { get } from 'axios';
 
+import sitemapParser from './sitemapParser.js';
 /**
  * Attempts to find the sitemap URL for a given website.
  * Checks common sitemap locations and returns the first valid one found.
@@ -21,7 +21,7 @@ async function findSitemap(websiteUrl) {
     for (const path of candidates) {
         try {
             const sitemapUrl = new URL(path, websiteUrl).href;
-            const response = await head(sitemapUrl, { timeout: 5000 });
+            const response = await axios.head(sitemapUrl, { timeout: 5000 });
             if (response.status === 200 && response.headers['content-type'] && response.headers['content-type'].includes('xml')) {
                 return sitemapUrl;
             }
@@ -32,12 +32,12 @@ async function findSitemap(websiteUrl) {
 
     try {
         const robotsURL = new URL('/robots.txt', websiteUrl).href;
-        const response = await get(robotsURL, { timeout: 5000 });
+        const response = await axios.get(robotsURL, { timeout: 5000 });
         const lines = response.data.split('\n');
         const sitemapLine = lines.find(line => line.toLowerCase().startsWith('sitemap:'));
         if (!sitemapLine) return null;
         const sitemapUrl = sitemapLine.split(':')[1].trim();
-        const responseSitemap = await head(sitemapUrl, { timeout: 5000 });
+        const responseSitemap = await axios.head(sitemapUrl, { timeout: 5000 });
         if (responseSitemap.status === 200 && responseSitemap.headers['content-type'] && responseSitemap.headers['content-type'].includes('xml')) {
             return sitemapUrl;
         }
@@ -47,5 +47,8 @@ async function findSitemap(websiteUrl) {
 
     return null;
 }
+
+console.log(await findSitemap('https://isatis.com'))
+console.log(await sitemapParser.extractUrlsFromSitemap('https://isatis.com/sitemap.xml'))
 
 export default { findSitemap };

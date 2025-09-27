@@ -1,4 +1,4 @@
-import { get } from 'axios';
+import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser';
 
 /**
@@ -8,7 +8,7 @@ import { XMLParser } from 'fast-xml-parser';
  */
 async function extractUrlsFromSitemap(sitemapUrl) {
     if(sitemapUrl==null) return [];
-    const response = await get(sitemapUrl);
+    const response = await axios.get(sitemapUrl);
     const parser = new XMLParser();
     const parsed = parser.parse(response.data);
 

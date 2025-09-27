@@ -7,6 +7,11 @@ const maxUrls = 10;
 const requestTimeout = 10000; // in milliseconds
 const crawlDelay = 200; // in milliseconds
 
+/**
+ * Fetches URLs from a site, while using delays and max depth to respect and not overload site's servers.
+ * @param {string} baseURL - The URL of the website.
+ * @returns {Promise<string[]>} - A promise that resolves to an array of URLs.
+ */
 async function crawlBaseURL(baseURL) {
     try {
         new URL(baseURL);
@@ -60,4 +65,3 @@ async function crawlBaseURL(baseURL) {
 }
 export default { crawlBaseURL };
 
-crawlBaseURL('https://example.com/');
