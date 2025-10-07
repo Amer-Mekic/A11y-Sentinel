@@ -1,4 +1,4 @@
-# A11y Sentinel 🛡️  -- ( 🚧🚧 Under Construction 🚧🚧 )
+# A11y Sentinel 🛡️ -- ( 🚧🚧 Under Construction 🚧🚧 )
 
 **A11y Sentinel** is an automated, full-stack dashboard that empowers development teams to monitor, track, and resolve web accessibility (WCAG) issues across their entire website—not just single pages. Move beyond manual checks to continuous, automated compliance auditing.
 
@@ -28,6 +28,11 @@ The application uses a MongoDB database with a schema designed for efficient que
 
 ![Database Schema Diagram](diagram.svg)
 
+## Implementation decisions
+
+First is the Crawling logic decision I have made. It follows the graph attached below for best performance in searching for URLs on pages:
+
+![Crawling logic decision tree](URL_search_diag.svg)
 
 ## Getting Started
 
