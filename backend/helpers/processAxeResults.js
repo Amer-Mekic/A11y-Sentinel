@@ -94,3 +94,5 @@ function calculateAccessibilityScore(axeResults) {
   if (totalViolations <= 35) return 20;
   return 0;
 }
+
+export default processAxeResults;

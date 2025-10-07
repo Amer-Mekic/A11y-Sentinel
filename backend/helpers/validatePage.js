@@ -1,5 +1,6 @@
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
+import processAxeResults from './processAxeResults.js';
 
 async function analyzeAccessibility(url) {
     const browser = await chromium.launch();
@@ -11,7 +12,8 @@ async function analyzeAccessibility(url) {
 
         const results = await new AxeBuilder({ page }).analyze();
 
-        return results.violations;
+        const processedResults = processAxeResults(results, url);
+        return processedResults.summary;
     } finally {
         await browser.close();
     }
@@ -25,13 +27,11 @@ if (!url) {
     process.exit(1);
 }
 
-analyzeAccessibility(url)
-    .then(violations => {
-        console.log(JSON.stringify(violations[0], "non", 2));
-    })
-    .catch(err => {
-        console.error('Error:', err);
-        process.exit(1);
-    });
+analyzeAccessibility(url).then(results => {
+    console.log(JSON.stringify(results, null, 2));
+}).catch(err => {
+    console.error('Error during accessibility analysis:', err);
+    process.exit(1);
+});
 
 export default analyzeAccessibility;
