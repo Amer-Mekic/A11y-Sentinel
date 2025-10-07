@@ -1,3 +1,19 @@
+/**
+ * Processes the results from an axe accessibility scan and summarizes key information.
+ *
+ * @param {Object} axeResults - The raw results object returned by axe-core after scanning a page.
+ * @param {Array} axeResults.violations - Array of violation objects detected by axe.
+ * @param {Array} [axeResults.incomplete] - Array of incomplete results, treated as warnings.
+ * @param {string} pageUrl - The URL of the page that was scanned.
+ * @returns {Object} An object containing:
+ *   - summary: {Object} High-level summary including error count, warning count, accessibility score, and timestamp.
+ *   - violations: {Array} List of processed violation objects with essential details and affected elements.
+ *   - pageUrl: {string} The URL of the scanned page.
+ *
+ * @example
+ * const results = processAxeResults(axeResults, 'https://example.com');
+ * console.log(results.summary.errorCount); // Number of accessibility errors
+ */
 function processAxeResults(axeResults, pageUrl) {
   // High-level summary (for ScanResult model)
   const summary = {
