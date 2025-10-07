@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/Auth.routes.js';
+import projectRoutes from './routes/Project.routes.js';
 import 'dotenv/config';
 
 const app = express();
@@ -9,8 +10,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Mounting auth routes
-app.use('/', authRoutes);
+// Mounting auth & project routes
+app.use('/api/auth', authRoutes);
+app.use('/api/project', projectRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running');
