@@ -29,7 +29,7 @@ const worker = new Worker('scanQueue', async (job) => {
     // Results to be stored in db
     return {
       success: true,
-      data: processedResults,
+      data: processedResults.summary,
       projectId,
       scanId
     };
@@ -50,15 +50,17 @@ const worker = new Worker('scanQueue', async (job) => {
 
 // Handle worker events
 worker.on('completed', (job) => {
-  console.log(`📦 Job ${job.id} completed!`);
+  console.log(`Job ${job.id} completed!`);
+  console.log('Scan Results:');
+  console.log(job.returnvalue.data);
 });
 
 worker.on('failed', (job, err) => {
-  console.error(`💥 Job ${job.id} failed with ${err.message}`);
+  console.error(`Job ${job.id} failed with ${err.message}`);
 });
 
 worker.on('error', (err) => {
-  console.error('🚨 Worker error:', err);
+  console.error('Worker error:', err);
 });
 
 console.log('Accessibility worker started...');
