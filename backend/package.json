@@ -5,7 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:worker": "node helpers/accessibilityWorker.js",
+    "dev:worker": "node helpers/accessibilityWorker.js"
   },
   "author": "Amer Mekic",
   "license": "ISC",

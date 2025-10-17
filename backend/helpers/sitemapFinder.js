@@ -48,7 +48,7 @@ async function findSitemap(websiteUrl) {
     return null;
 }
 
-console.log(await findSitemap('https://isatis.com'))
-console.log(await sitemapParser.extractUrlsFromSitemap('https://isatis.com/sitemap.xml'))
+//console.log(await findSitemap('https://isatis.com'))
+//console.log(await sitemapParser.extractUrlsFromSitemap('https://isatis.com/sitemap.xml'))
 
 export default { findSitemap };
