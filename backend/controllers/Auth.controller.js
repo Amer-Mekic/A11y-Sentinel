@@ -73,8 +73,23 @@ export const login = async (req, res) => {
             process.env.JWT_SECRET || 'secret',
             { expiresIn: '1h' }
         );
-        res.json({ token });
+
+        // Set secure httpOnly cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            //secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000
+        });
+
+        res.json({ success: true, message: "Successfully logged in" });
     } catch (err) {
         res.status(500).json({ message: 'Internal server error.' });
     }
 };
+
+export const logout = (_, res) => {
+    res.clearCookie('token');
+    res.json({ success: true });
+};
+
