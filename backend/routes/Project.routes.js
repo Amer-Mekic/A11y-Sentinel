@@ -6,8 +6,11 @@ import {
     updateProject,
     deleteProject
 } from '../controllers/Project.controller.js';
+import {authenticateToken} from '../middleware/auth.js';
 
 const router = express.Router();
+
+router.use(authenticateToken); 
 
 router.post('/projects', createProject);
 router.get('/users/:userId/projects', getUserProjects);

@@ -14,6 +14,8 @@ export const authenticateToken = (req, res, next) => {
     req.user = decoded; // Add user data to request object
     next(); // Authentication passed, move to the actual route handler
   } catch (error) {
-    return res.status(403).json({ error: 'Invalid or expired token' });
+    // Clear invalid cookie
+    res.clearCookie('token');
+    return res.status(403).json({ error: 'Invalid token' });
   }
 };

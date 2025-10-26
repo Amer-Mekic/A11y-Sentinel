@@ -71,7 +71,10 @@ export const login = async (req, res) => {
         const token = jwt.sign(
             { email: user.email, id: user.id },
             process.env.JWT_SECRET || 'secret',
-            { expiresIn: '1h' }
+            { 
+                expiresIn: '1h' ,
+                issuer: 'A11Y-sentinel'
+            }
         );
 
         // Set secure httpOnly cookie
@@ -82,7 +85,7 @@ export const login = async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000
         });
 
-        res.json({ success: true, message: "Successfully logged in" });
+        res.json({ success: true, message: "Successfully logged in" , user: { id: user.id, email: user.email }});
     } catch (err) {
         res.status(500).json({ message: 'Internal server error.' });
     }
