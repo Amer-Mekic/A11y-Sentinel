@@ -3,7 +3,7 @@ import https from 'https';
 const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
 const maxCrawlDepth = 3;
-const maxUrls = 10;
+const maxUrls = 3;
 const requestTimeout = 10000; // in milliseconds
 const crawlDelay = 200; // in milliseconds
 
@@ -18,50 +18,95 @@ async function crawlBaseURL(baseURL) {
     } catch (err) {
         throw new Error('Invalid URL');
     }
-    const urls = new Set([baseURL]);
+
+    const urls = new Map(); // for depth tracking
     const visited = new Set();
+    urls.set(baseURL, 0);
+
     // Crawl logic:
     while (urls.size > visited.size && visited.size < maxUrls) {
-    const currentUrl = Array.from(urls).find(url => !visited.has(url));
-    if (!currentUrl) break;
-
-    console.log(`Crawling: ${currentUrl}`);
-    try {
-        visited.add(currentUrl); 
-        const pageUrls = [];       
-        https.get(currentUrl, { agent: httpsAgent }, res => {  
-            let data = '';
-            res.on('data', chunk => { data += chunk; });    
-            res.on('end', () => {
-                // Extract ALL URLs ('g' -> 'global') from the HTML using regex "https://..."
-                const urlRegex = /href="(https:\/\/[^"]+)"/g;
-                let match;
-                while ((match = urlRegex.exec(data)) !== null) {
-                    pageUrls.push(match[1]);
-                }
-                console.log('Found URLs:', pageUrls);
-                });
-            }).on('error', err => {
-                console.error('Error: ' + err.message);
-            });
-      // Filter, normalize, and add new URLs that belong to the same domain
-      for (const foundUrl of pageUrls) {
-        const parsedUrl = new URL(foundUrl);
-        const parsedBaseUrl = new URL(baseURL);
+        // Find the next URL to crawl (BFS-like by taking the one with smallest depth)
+        let currentUrl = null;
+        let currentDepth = 0;
         
-        // Only add URLs from the same domain to avoid crawling external sites
-        if (parsedUrl.hostname === parsedBaseUrl.hostname) {
-          // Normalize the URL by removing fragments and query parameters for deduplication
-          const normalizedUrl = `${parsedUrl.origin}${parsedUrl.pathname}`;
-          urls.add(normalizedUrl);
+        for (const [url, depth] of urls) {
+            if (!visited.has(url)) {
+                currentUrl = url;
+                currentDepth = depth;
+                break;
+            }
         }
-      }
-    } catch (error) {
-      console.error(`Failed to crawl ${currentUrl}:`, error.message);
-      visited.add(currentUrl); // Mark as visited even if it failed
-    }
-  }
-  return Array.from(urls);
-}
-export default { crawlBaseURL };
+        
+        if (!currentUrl) break;
 
+        // Respect crawl delay (except for first request)
+        if (visited.size > 0) {
+            await new Promise(resolve => setTimeout(resolve, crawlDelay));
+        }
+
+        console.log(`Crawling: ${currentUrl} (depth: ${currentDepth})`);
+        
+        try {
+            visited.add(currentUrl);
+              const pageUrls = await new Promise((resolve, reject) => {
+                // Start timer for 10 seconds to complete request, 
+                // not to end up waiting for the server forever
+                const timeoutId = setTimeout(() => {
+                    req.destroy();
+                    reject(new Error(`Request timeout after ${requestTimeout}ms`));
+                }, requestTimeout);
+
+                const req = https.get(currentUrl, { agent: httpsAgent }, res => {
+                    let data = '';
+                    res.on('data', chunk => { data += chunk; });
+                    res.on('end', () => {
+                        clearTimeout(timeoutId);
+                        // Extract ALL URLs from the HTML
+                        const urlRegex = /href="(https:\/\/[^"]+)"/g;
+                        const foundUrls = [];
+                        let match;
+                        while ((match = urlRegex.exec(data)) !== null) {
+                            foundUrls.push(match[1]);
+                        }
+                        console.log('Found URLs:', foundUrls);
+                        resolve(foundUrls);
+                    });
+                });
+
+                req.on('error', err => {
+                    clearTimeout(timeoutId);
+                    reject(err);
+                });
+            });
+
+            // Filter, normalize, and add new URLs that belong to the same domain
+            for (const foundUrl of pageUrls) {
+                try {
+                    const parsedUrl = new URL(foundUrl);
+                    const parsedBaseUrl = new URL(baseURL);
+                    
+                    // Only add URLs from the same domain
+                    if (parsedUrl.hostname === parsedBaseUrl.hostname) {
+                        // Normalize the URL
+                        const normalizedUrl = `${parsedUrl.origin}${parsedUrl.pathname}`;
+                        
+                        // Only add if we haven't seen it and we're within depth limit
+                        if (!urls.has(normalizedUrl) && currentDepth < maxCrawlDepth) {
+                            urls.set(normalizedUrl, currentDepth + 1);
+                        }
+                    }
+                } catch (err) {
+                    console.error(`Invalid URL found: ${foundUrl}`);
+                }
+            }
+        } catch (error) {
+            console.error(`Failed to crawl ${currentUrl}:`, error.message);
+        }
+    }
+    let result = Array.from(urls.keys()).slice(1, maxUrls + 1); // Exclude the baseURL itself
+    console.log( "All urls: ");
+    return result;
+}
+//let site = 'https://www.nasa.gov/  ';
+//console.log(await crawlBaseURL(site));
+export default { crawlBaseURL };
