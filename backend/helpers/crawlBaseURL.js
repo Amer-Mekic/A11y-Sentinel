@@ -20,7 +20,7 @@ async function crawlBaseURL(baseURL) {
     }
     const urls = new Set([baseURL]);
     const visited = new Set();
-    // Implement crawling logic here, respecting maxCrawlDepth, maxPagesToCrawl, requestTimeout, and crawlDelay
+    // Crawl logic:
     while (urls.size > visited.size && visited.size < maxUrls) {
     const currentUrl = Array.from(urls).find(url => !visited.has(url));
     if (!currentUrl) break;
@@ -51,7 +51,7 @@ async function crawlBaseURL(baseURL) {
         
         // Only add URLs from the same domain to avoid crawling external sites
         if (parsedUrl.hostname === parsedBaseUrl.hostname) {
-          // Normalize the URL by removing fragments and query parameters for deduplication?
+          // Normalize the URL by removing fragments and query parameters for deduplication
           const normalizedUrl = `${parsedUrl.origin}${parsedUrl.pathname}`;
           urls.add(normalizedUrl);
         }
