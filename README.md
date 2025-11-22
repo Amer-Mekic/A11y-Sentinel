@@ -1,26 +1,23 @@
 # A11y Sentinel 🛡️ -- ( 🚧🚧 Under Construction 🚧🚧 )
 
-**A11y Sentinel** is an automated, full-stack dashboard that empowers development teams to monitor, track, and resolve web accessibility (WCAG) issues across their entire website—not just single pages. Move beyond manual checks to continuous, automated compliance auditing.
+**A11y Sentinel** is an automated backend application that empowers development teams to monitor, track, and resolve web accessibility (WCAG) issues across their entire website, not just single pages. Move beyond manual checks to continuous, automated compliance auditing.
 
 ## Features:
 
 - **Site-Wide Scans**: Automatically crawls your website using sitemaps or `robots.txt` to ensure complete coverage.
-- **Historical Trend Analysis**: Visualize your accessibility health over time with interactive charts. Track progress and prevent regressions.
-- **Blazing Fast Scans**: Powered by a distributed **Redis-backed job queue** for asynchronous processing, ensuring a responsive UI.
+- **Blazing Fast Scans**: Powered by a distributed **Redis-backed job queue** for asynchronous processing.
 - **Actionable Reports**: Drill down into individual pages to see specific errors, their impact, and the elements affected.
 - **axe-core Powered**: Utilizes the industry-standard `axe-core` engine for the most reliable accessibility analysis.
-- **Secure & Multi-Tenant**: Users can create private accounts and manage multiple client projects in one place.
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14, React, JavaScript, Tailwind CSS
 - **Backend**: Node.js, Express, JavaScript
 - **Database**: MongoDB with Prisma ORM
 - **Job Queue & Caching**: Redis, BullMQ
 - **Browser Automation**: Playwright
 - **Accessibility Engine**: axe-core
-- **Deployment**: Vercel (Frontend), Railway (Backend, DB, Redis)
-- **Auth**: Next-Auth.js, JWT
+- **Deployment**: Railway (Backend, DB, Redis)
+- **Auth**: JWT, HTTPOnly Cookie
 
 ## Database Schema
 
@@ -54,7 +51,7 @@ First is the Crawling logic decision I have made. It follows the graph attached 
 2.  **Install dependencies**
 
     ```bash
-    # Install root dependencies in frontend and backend respectively
+    # Install root dependencies
     npm install
     ```
 
@@ -66,8 +63,7 @@ First is the Crawling logic decision I have made. It follows the graph attached 
     DATABASE_URL="your_mongodb_connection_string"
 
     # Auth
-    NEXTAUTH_SECRET="your_nextauth_secret"
-    NEXTAUTH_URL="http://localhost:3000"
+    JWT_SECRET="your_jwt_secret"
 
     # Redis (for BullMQ)
     REDIS_URL="your_redis_connection_string"
@@ -87,23 +83,19 @@ First is the Crawling logic decision I have made. It follows the graph attached 
     # Run the backend (Server)
     npm run dev:server
 
-    # Run the frontend (Client)
-    npm run dev:client
+    # Run the bullmq process (Server)
+    npm run dev:worker
     ```
-    Open [http://localhost:3000](http://localhost:3000) with your browser to see the app.
+    Send requests using Postman
 
 ## Project Roadmap
 
 - [ ] **Email Reports**: Automated weekly digest emails with scan summaries.
-- [ ] **PDF Export**: Generate and download client-ready PDF audit reports.
-- [ ] **Integration Hooks**: Automate scans via GitHub Actions or Netlify Deploy Hooks.
+- [ ] **PDF Export**: Generate and download PDF reports.
+- [ ] **Integration Hooks**: Automate scans via GitHub Actions
 - [ ] **Cross-Browser Testing**: Run scans using Playwright's Firefox and WebKit engines.
-
-## Contributing
-
-Contributions, issues, and feature requests are welcome!
 
 ## Acknowledgments
 
-- The incredible [axe-core](https://github.com/dequelabs/axe-core) team for their amazing accessibility engine.
-- The [Playwright](https://playwright.dev/) team for creating a robust browser automation tool.
+- The [axe-core](https://github.com/dequelabs/axe-core) team for the accessibility engine.
+- The [Playwright](https://playwright.dev/) team for the automation tool.
