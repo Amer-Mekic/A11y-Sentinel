@@ -82,6 +82,7 @@ export const login = async (req, res) => {
             httpOnly: true,
             //secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
+            //secure:true, -> will enable in production
             maxAge: 24 * 60 * 60 * 1000
         });
 

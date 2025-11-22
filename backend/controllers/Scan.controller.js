@@ -5,6 +5,7 @@ export const startScan = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const authCookie = req.cookies.token;
   const { projectId, urls } = req.body; // Array of URLs to scan
 
   try {
