@@ -14,7 +14,7 @@
  * const results = processAxeResults(axeResults, 'https://example.com');
  * console.log(results.summary.errorCount); // Number of accessibility errors
  */
-function processAxeResults(axeResults, pageUrl) {
+async function processAxeResults(axeResults, pageUrl) {
   // High-level summary (for ScanResult model)
   const summary = {
     errorCount: axeResults.violations.length,
@@ -42,7 +42,6 @@ function processAxeResults(axeResults, pageUrl) {
       }))
     };
   });
-
   return {
     summary,
     violations: processedViolations,
@@ -85,14 +84,12 @@ function extractRuleSpecificData(ruleId, node) {
 // Calculate an accessibility score (0-100)
 function calculateAccessibilityScore(axeResults) {
   const totalViolations = axeResults.violations.length;
-  
-  // Simple tiered scoring 
   if (totalViolations === 0) return 100;
-  if (totalViolations <= 3) return 80;
-  if (totalViolations <= 10) return 60;
-  if (totalViolations <= 20) return 40;
-  if (totalViolations <= 35) return 20;
-  return 0;
+  else if (totalViolations <= 3) return 80;
+  else if (totalViolations <= 10) return 60;
+  else if (totalViolations <= 20) return 40;
+  else if (totalViolations <= 35) return 20;
+  else return 0;
 }
 
 export default processAxeResults;

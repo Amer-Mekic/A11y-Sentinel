@@ -5,8 +5,7 @@
 ## Features:
 
 - **Site-Wide Scans**: Automatically crawls your website using sitemaps or `robots.txt` to ensure complete coverage.
-- **Blazing Fast Scans**: Powered by a distributed **Redis-backed job queue** for asynchronous processing.
-- **Actionable Reports**: Drill down into individual pages to see specific errors, their impact, and the elements affected.
+- **Fast Scans**: Powered by a distributed **Redis-backed job queue** for asynchronous processing.
 - **axe-core Powered**: Utilizes the industry-standard `axe-core` engine for the most reliable accessibility analysis.
 
 ## Tech Stack
@@ -83,17 +82,10 @@ First is the Crawling logic decision I have made. It follows the graph attached 
     # Run the backend (Server)
     npm run dev:server
 
-    # Run the bullmq process (Server)
+    # Run the bullmq process (In Second terminal)
     npm run dev:worker
     ```
     Send requests using Postman
-
-## Project Roadmap
-
-- [ ] **Email Reports**: Automated weekly digest emails with scan summaries.
-- [ ] **PDF Export**: Generate and download PDF reports.
-- [ ] **Integration Hooks**: Automate scans via GitHub Actions
-- [ ] **Cross-Browser Testing**: Run scans using Playwright's Firefox and WebKit engines.
 
 ## Acknowledgments
 
