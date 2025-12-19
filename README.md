@@ -1,6 +1,6 @@
 # A11y Sentinel 🛡️ -- ( 🚧🚧 Under Construction 🚧🚧 )
 
-**A11y Sentinel** is an automated backend application that empowers development teams to monitor, track, and resolve web accessibility (WCAG) issues across their entire website, not just single pages. Move beyond manual checks to continuous, automated compliance auditing.
+**A11y Sentinel** is an automated backend application that allows development teams to monitor, track, and resolve web accessibility (WCAG) issues across their entire website, not just single pages. Move beyond manual checks to continuous, automated compliance auditing.
 
 ## Features:
 
