@@ -11,7 +11,7 @@ export const authenticateToken = (req, res, next) => {
   try {
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Add user data to request object
+    req.user = {id: decoded.id}; // Add user data to request object
     next(); // Authentication passed, move to the actual route handler
   } catch (error) {
     // Clear invalid cookie

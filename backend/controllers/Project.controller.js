@@ -11,10 +11,11 @@ import sitemapFinder from '../helpers/sitemapFinder.js';
  * @returns {Promise<void>}
  */
 export const createProject = async (req, res) => {
-    const { name, url, sitemap, userId } = req.body;
+    const { name, url, sitemap} = req.body;
+    const user = req.user.id;
     try {
-        if (!name || !userId || !url) {
-            return res.status(400).json({ message: 'Project name, userId and URL are required.' });
+        if (!name || !url) {
+            return res.status(400).json({ message: 'Project name and URL are required.' });
         }
         let finalSitemap = sitemap;
         if (!finalSitemap) {
@@ -22,7 +23,7 @@ export const createProject = async (req, res) => {
             // can be null if not found
         }
         const newProject = await prisma.project.create({
-            data: { name, url, sitemap: finalSitemap, userId }
+            data: { name, url, sitemap: finalSitemap, userId: user}
         });
         res.status(201).json(newProject);
     } catch (err) {
