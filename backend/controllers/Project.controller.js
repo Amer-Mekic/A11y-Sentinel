@@ -40,10 +40,12 @@ export const createProject = async (req, res) => {
  * @returns {Promise<void>}
  */
 export const getUserProjects = async (req, res) => {
-    const { userId } = req.params;
+    const user = req.user.id;
+    if (!user)
+        return res.status(400).json({ message: 'Log in to view projects.' });
     try {
         const projects = await prisma.project.findMany({
-            where: { userId: parseInt(userId) }
+            where: { userId: user }
         });
         res.json(projects);
     }
@@ -85,11 +87,11 @@ export const getProjectById = async (req, res) => {
  */
 export const updateProject = async (req, res) => {
     const { id } = req.params;
-    const { name, description } = req.body;
+    const { name, url } = req.body;
     try {
         const updatedProject = await prisma.project.update({
             where: { id: parseInt(id) },
-            data: { name, description }
+            data: { name, url }
         });
         res.json(updatedProject);
     } catch (err) {
