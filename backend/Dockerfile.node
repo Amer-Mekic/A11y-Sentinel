@@ -1,7 +1,9 @@
-FROM node:latest-alpine
+FROM node:24.12.0-alpine
+RUN apk add --no-cache curl
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+USER node
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
