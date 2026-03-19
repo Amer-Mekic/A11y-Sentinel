@@ -15,7 +15,7 @@
 - **Job Queue & Caching**: Redis, BullMQ
 - **Browser Automation**: Playwright
 - **Accessibility Engine**: axe-core
-- **Deployment**: Railway (Backend, DB, Redis)
+- **Deployment**: Docker (backend, redis, mongodb, healthchecks, compose)
 - **Auth**: JWT, HTTPOnly Cookie
 
 ## Database Schema
